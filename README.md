@@ -79,7 +79,7 @@ GitHub has a rate limit without providing a GitHub token. The current rate limit
 
 #### How to know which plugins are compatible with this AutoUpdater?
 
-There is a list of plugins here (feel free to add yours via opening an issue or creating a pull-request). Compatible plugins should include the following badge:
+There is a list of plugins [here](https://github.com/Kandru/cs2-update-manager/blob/main/COMPATIBLE_PLUGINS.md) (feel free to add yours via opening an issue or creating a pull-request). Compatible plugins should include the following badge:
 
 ```
 [![UpdateManager Compatible](https://img.shields.io/badge/CS2-UpdateManager-darkgreen)](https://github.com/Kandru/cs2-update-manager/)
