@@ -10,7 +10,7 @@ namespace UpdateManager
     {
         public override string ModuleName => "Update Manager";
         public override string ModuleAuthor => "Jon-Mailes Graeffe <mail@jonni.it> / Kalle <kalle@kandru.de>";
-        public override string ModuleVersion => "0.1.1";
+        public override string ModuleVersion => "0.1.2";
 
         private string _pluginPath = "";
         private List<Tuple<string, string, string>> _plugins = new();
