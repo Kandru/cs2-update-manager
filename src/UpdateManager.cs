@@ -12,7 +12,7 @@ namespace UpdateManager
     {
         public override string ModuleName => "Update Manager";
         public override string ModuleAuthor => "Jon-Mailes Graeffe <mail@jonni.it> / Kalle <kalle@kandru.de>";
-        public override string ModuleVersion => "0.1.0";
+        public override string ModuleVersion => "0.1.1";
 
         private string _pluginPath = "";
         private List<Tuple<string, string, string>> _plugins = new();
@@ -85,7 +85,7 @@ namespace UpdateManager
         {
             foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
             {
-                // TODO: update UpdateManager itself. Skip for now.
+                // ignore UpdateManager
                 if (pluginName == "UpdateManager") continue;
                 // get plugin configuration
                 var pluginConfig = Config.Plugins[pluginName];
@@ -101,6 +101,7 @@ namespace UpdateManager
                 // check if response is successful
                 if (!response.IsSuccessStatusCode) {
                     Console.WriteLine(Localizer["update.error"].Value
+                        .Replace("{pluginName}", pluginName)
                         .Replace("{error}", response.ReasonPhrase));
                     continue;
                 }
