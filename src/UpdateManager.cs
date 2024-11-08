@@ -87,8 +87,6 @@ namespace UpdateManager
             {
                 foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
                 {
-                    // ignore UpdateManager
-                    if (pluginName == "UpdateManager") continue;
                     // get plugin configuration
                     var pluginConfig = Config.Plugins[pluginName];
                     if (pluginConfig == null || !pluginConfig.Enabled) continue;
