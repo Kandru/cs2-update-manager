@@ -2,5 +2,9 @@
     "core.hotreload": "[UpdateManager] Hot-Reloaded Plugin!",
     "core.unload": "[UpdateManager] Unloaded Plugin!",
     "config.loaded": "[UpdateManager] Loaded configuration!",
-    "plugin.found": "[UpdateManager] Found plugin: {pluginName} v{pluginVersion}"
+    "plugin.found": "[UpdateManager] Found plugin: {pluginName} v{pluginVersion}",
+    "update.error": "[UpdateManager] Error while updating plugin {pluginName}: {error}",
+    "update.available": "[UpdateManager] New version available: {pluginName} v{latestVersion} (current: v{pluginVersion})",
+    "update.notfound": "[UpdateManager] {pluginName} v{pluginVersion} is already the newest version",
+    "update.success": "[UpdateManager] Plugin {pluginName} updated from v{pluginVersion} to v{latestVersion}"
 }

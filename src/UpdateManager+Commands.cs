@@ -12,10 +12,6 @@ namespace UpdateManager
         {
             // update plugin list
             getPluginList();
-            // initialize configuration
-            LoadConfig();
-            UpdateConfig();
-            SaveConfig();
             // check for updates
             checkForUpdates();
         }
