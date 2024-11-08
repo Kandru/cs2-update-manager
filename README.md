@@ -1,8 +1,8 @@
 # CounterstrikeSharp - Plugin Update Manager
 
-[![GitHub release](https://img.shields.io/github/release/Kandru/cs2-update-manager?include_prereleases=&sort=semver&color=blue)](https://github.com/Kandru/cs2-map-modifier/releases/)
+[![GitHub release](https://img.shields.io/github/release/Kandru/cs2-update-manager?include_prereleases=&sort=semver&color=blue)](https://github.com/Kandru/cs2-update-manager/releases/)
 [![License](https://img.shields.io/badge/License-GPLv3-blue)](#license)
-[![issues - cs2-map-modifier](https://img.shields.io/github/issues/Kandru/cs2-update-manager)](https://github.com/Kandru/cs2-map-modifier/issues)
+[![issues - cs2-map-modifier](https://img.shields.io/github/issues/Kandru/cs2-update-manager)](https://github.com/Kandru/cs2-update-manager/issues)
 
 The Plugin Update Manager is a plugin for Counter-Strike 2 designed to automatically update all your other plugins.
 
