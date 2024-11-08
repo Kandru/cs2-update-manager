@@ -1,2 +1,2 @@
-# cs2-roll-the-dice
-Counterstrike 2 (Counterstrikesharp) Roll the Dice
+# cs2-update-manager
+Counterstrike 2 (Counterstrikesharp) Update Manager

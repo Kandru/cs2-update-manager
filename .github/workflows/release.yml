@@ -8,7 +8,7 @@ on:
 
 env:
   REPOSITORY_FOLDER: "src" # subfolder with source code
-  REPOSITORY_MAIN_FILE: "RollTheDice.cs" # main file of the project
+  REPOSITORY_MAIN_FILE: "UpdateManager.cs" # main file of the project
 
 jobs:
   create-release:
