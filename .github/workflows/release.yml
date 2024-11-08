@@ -56,6 +56,12 @@ jobs:
       if: env.new_version == 'true'
       run: dotnet publish -c Release
 
+    - name: Prepare CS2-UpdateManager ${{ env.REPOSITORY_NAME }}.info
+      if: env.new_version == 'true'
+      run: |
+        echo "version: ${{ env.version }}" > /home/runner/work/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_NAME }}.info
+        echo "repository: https://github.com/${{ github.repository }}" >> /home/runner/work/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_NAME }}.info
+
     - name: Prepare Release
       if: env.new_version == 'true'
       run: |
