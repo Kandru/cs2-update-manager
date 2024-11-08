@@ -12,7 +12,7 @@ namespace UpdateManager
         // disable update check for specific plugins
         [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
         // github token for private repositories
-        [JsonPropertyName("github_token")] public string GithubToken { get; set; } = new();
+        [JsonPropertyName("github_token")] public string GithubToken { get; set; } = "";
     }
 
     public class PluginConfig : BasePluginConfig
@@ -20,13 +20,12 @@ namespace UpdateManager
         // disable update checks completely
         [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
         // disable update check for specific plugins
-        [JsonPropertyName("plugins")] public Dictionary<string, PluginEntryConfig> Plugins { get; set; } = new();
+        [JsonPropertyName("plugins")] public Dictionary<string, PluginEntryConfig> Plugins { get; set; } = new Dictionary<string, PluginEntryConfig>();
     }
 
     public partial class UpdateManager : BasePlugin, IPluginConfig<PluginConfig>
     {
         public PluginConfig Config { get; set; } = null!;
-        private MapConfig[] _currentMapConfigs = Array.Empty<MapConfig>();
         private string _configPath = "";
 
         private void LoadConfig()
@@ -44,19 +43,11 @@ namespace UpdateManager
         private void UpdateConfig()
         {
             // iterate through all dices and add them to the configuration file
-            foreach (var plugin in _plugins)
+            foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
             {
-                if (!Config.Plugins.ContainsKey(plugin[0]))
+                if (!Config.Plugins.ContainsKey(pluginName))
                 {
-                    Config.Plugins.Add(plugin[0], new PluginEntryConfig());
-                }
-            }
-            // delete all keys that do not exist anymore
-            foreach (var key in Config.Plugins.Keys)
-            {
-                if (!_plugins.Any(plugin => plugin[0] == key))
-                {
-                    Config.Plugins.Remove(key);
+                    Config.Plugins.Add(pluginName, new PluginEntryConfig());
                 }
             }
         }
