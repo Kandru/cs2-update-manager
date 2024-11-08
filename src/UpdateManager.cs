@@ -70,6 +70,9 @@ namespace UpdateManager
                     var pluginRepoURL = yamlObject["repository"];
                     // add to plugin list
                     _plugins.Add(new Tuple<string, string, string>(pluginName, pluginVersion, pluginRepoURL));
+                    Console.WriteLine(Localizer["plugin.found"].Value
+                        .Replace("{pluginName}", pluginName)
+                        .Replace("{pluginVersion}", pluginVersion));
                 }
             }
         }
