@@ -1,0 +1,5 @@
+{
+    "core.hotreload": "[UpdateManager] Hot-Reloaded Plugin!",
+    "core.unload": "[UpdateManager] Unloaded Plugin!",
+    "config.loaded": "[UpdateManager] Loaded configuration!"
+}
