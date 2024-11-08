@@ -1,5 +1,6 @@
 # CounterstrikeSharp - Plugin Update Manager
 
+[![UpdateManager Compatible](https://img.shields.io/badge/CS2-UpdateManager-darkgreen)](https://github.com/Kandru/cs2-update-manager/)
 [![GitHub release](https://img.shields.io/github/release/Kandru/cs2-update-manager?include_prereleases=&sort=semver&color=blue)](https://github.com/Kandru/cs2-update-manager/releases/)
 [![License](https://img.shields.io/badge/License-GPLv3-blue)](#license)
 [![issues - cs2-map-modifier](https://img.shields.io/github/issues/Kandru/cs2-update-manager)](https://github.com/Kandru/cs2-update-manager/issues)
@@ -75,6 +76,14 @@ Release your plugin on GitHub using a public repository (or a private one if you
 #### The log file contains information about a rate limit exceeded.
 
 GitHub has a rate limit without providing a GitHub token. The current rate limit is 60 requests per hour. If you host this plugin on a shared host, other people may be using it as well. Create a GitHub account and create a GitHub token with read access to all the repositories you want to be checked. The rate limits are much better than anonymous access.
+
+#### How to know which plugins are compatible with this AutoUpdater?
+
+There is a list of plugins here (feel free to add yours via opening an issue or creating a pull-request). Compatible plugins should include the following badge:
+
+```
+[![UpdateManager Compatible](https://img.shields.io/badge/CS2-UpdateManager-darkgreen)](https://github.com/Kandru/cs2-update-manager/)
+```
 
 ## License
 
