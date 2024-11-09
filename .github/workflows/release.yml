@@ -56,7 +56,7 @@ jobs:
       if: env.new_version == 'true'
       run: dotnet publish -c Release
 
-    - name: Prepare CS2-UpdateManager ${{ env.REPOSITORY_NAME }}.info
+    - name: Prepare ${{ env.REPOSITORY_NAME }}.info
       if: env.new_version == 'true'
       run: |
         echo "version: ${{ env.version }}" > /home/runner/work/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_FOLDER }}/bin/Release/net8.0/publish/${{ env.PLUGIN_NAME }}.info
