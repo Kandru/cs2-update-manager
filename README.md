@@ -7,7 +7,7 @@
 
 The Plugin Update Manager is a plugin for Counter-Strike 2 designed to automatically update all your other plugins.
 
-![Example Usage GIF](https://github.com/kandru/cs2-update-manager/assets/update_plugins.gif)
+![Example Usage GIF](https://github.com/Kandru/cs2-update-manager/blob/main/assets/update_plugins.gif?raw=true)
 
 ## Key Features
 
