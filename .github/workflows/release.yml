@@ -1,15 +1,18 @@
-name: Create Release
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+name: Build Release
 
 env:
   REPOSITORY_FOLDER: "src" # subfolder with source code
   PLUGIN_NAME: "UpdateManager" # main file of the project
 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/UpdateManager.cs' # only on change of the file with the version number string in it
+  workflow_dispatch:
+
+# job to create a new release
 jobs:
   create-release:
     runs-on: ubuntu-latest
