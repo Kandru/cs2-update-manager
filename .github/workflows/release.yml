@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/UpdateManager.cs' # only on change of the file with the version number string in it
+      - 'src/Version.cs' # only on change of the file with the version number string in it
   workflow_dispatch:
 
 # job to create a new release
@@ -24,10 +24,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Get Current Project Version Number From ${{ env.PLUGIN_NAME }}.cs
+    - name: Get Current Project Version Number From Version.cs
       id: get_version
       run: |
-        version=$(grep -oP '(?<=ModuleVersion => ")[^"]*' ${{ env.REPOSITORY_FOLDER }}/${{ env.PLUGIN_NAME }}.cs)
+        version=$(grep -oP '(?<=ModuleVersion => ")[^"]*' ${{ env.REPOSITORY_FOLDER }}/Version.cs)
         echo "version=$version" >> $GITHUB_ENV
 
     - name: Get Current Release Version Number
