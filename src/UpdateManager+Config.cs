@@ -41,7 +41,7 @@ namespace UpdateManager
 
         private void UpdateConfig()
         {
-            // iterate through all dices and add them to the configuration file
+            // iterate through all plugins and add them to the configuration file
             foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
             {
                 if (!Config.Plugins.ContainsKey(pluginName))
