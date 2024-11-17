@@ -92,8 +92,13 @@ namespace UpdateManager
                     {
                         var client = new HttpClient();
                         client.DefaultRequestHeaders.Add("User-Agent", "CounterStrikeSharp");
+                        // check for plugin github token
                         if (!string.IsNullOrEmpty(pluginConfig.GithubToken))
                             client.DefaultRequestHeaders.Add("Authorization", $"token {pluginConfig.GithubToken}");
+                        // check for global github token
+                        else if (!string.IsNullOrEmpty(Config.GithubToken))
+                            client.DefaultRequestHeaders.Add("Authorization", $"token {Config.GithubToken}");
+                        // get latest release
                         var repoPath = new Uri(pluginRepoURL).AbsolutePath.Trim('/');
                         var response = await client.GetAsync($"https://api.github.com/repos/{repoPath}/releases/latest");
                         // check if response is successful
@@ -142,12 +147,15 @@ namespace UpdateManager
                                 .Replace("{error}", "Assets not found in release data."));
                             continue;
                         }
+                        // get asset list
                         var assetList = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(assets?.ToString() ?? string.Empty);
+                        // look for zip asset
                         var zipAsset = assetList?.FirstOrDefault(a =>
                         {
                             if (a == null) return false;
                             return a.TryGetValue("name", out var name) && name?.ToString().EndsWith(".zip") == true;
                         });
+                        // check if zip asset was found
                         if (zipAsset == null || !zipAsset.TryGetValue("browser_download_url", out var browserDownloadUrl))
                         {
                             Console.WriteLine(Localizer["update.error"].Value
@@ -155,9 +163,11 @@ namespace UpdateManager
                                 .Replace("{error}", "Download URL for .zip file not found in assets."));
                             continue;
                         }
+                        // download zip
                         var downloadURL = browserDownloadUrl.ToString();
                         var downloadPath = Path.Combine(_pluginPath, $"{pluginName}.zip");
                         var downloadStream = await client.GetStreamAsync(downloadURL);
+                        // save zip
                         using (var fileStream = File.Create(downloadPath))
                         {
                             await downloadStream.CopyToAsync(fileStream);
