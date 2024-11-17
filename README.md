@@ -44,6 +44,7 @@ This plugin automatically creates a readable JSON configuration file. This confi
 ```json
 {
   "enabled": true,
+  "github_token": "",
   "plugins": {
     "MapModifiers": {
       "enabled": true,
