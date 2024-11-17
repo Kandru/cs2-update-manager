@@ -18,6 +18,8 @@ namespace UpdateManager
     {
         // disable update checks completely
         [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
+        // github token for private repositories
+        [JsonPropertyName("github_token")] public string GithubToken { get; set; } = "";
         // disable update check for specific plugins
         [JsonPropertyName("plugins")] public Dictionary<string, PluginEntryConfig> Plugins { get; set; } = new Dictionary<string, PluginEntryConfig>();
     }
