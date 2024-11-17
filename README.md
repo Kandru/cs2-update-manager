@@ -1,7 +1,7 @@
 # CounterstrikeSharp - Plugin Update Manager
 
 [![UpdateManager Compatible](https://img.shields.io/badge/CS2-UpdateManager-darkgreen)](https://github.com/Kandru/cs2-update-manager/)
-[![Discord Support](https://img.shields.io/discord/289448144335536138?style=plastic&label=Discord%20Support)](https://discord.gg/bkuF8xKHUt)
+[![Discord Support](https://img.shields.io/discord/289448144335536138?label=Discord%20Support)](https://discord.gg/bkuF8xKHUt)
 [![GitHub release](https://img.shields.io/github/release/Kandru/cs2-update-manager?include_prereleases=&sort=semver&color=blue)](https://github.com/Kandru/cs2-update-manager/releases/)
 [![License](https://img.shields.io/badge/License-GPLv3-blue)](#license)
 [![issues - cs2-map-modifier](https://img.shields.io/github/issues/Kandru/cs2-update-manager)](https://github.com/Kandru/cs2-update-manager/issues)
