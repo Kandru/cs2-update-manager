@@ -78,7 +78,11 @@ jobs:
       if: env.new_version == 'true'
       id: get_release_notes
       run: |
-        last_tag=$(git describe --tags --abbrev=0 HEAD^)
+        if git describe --tags --abbrev=0 HEAD^ >/dev/null 2>&1; then
+          last_tag=$(git describe --tags --abbrev=0 HEAD^)
+        else
+          last_tag=$(git rev-list --max-parents=0 HEAD)
+        fi
         release_notes=$(git log --pretty=format:"[%h](https://github.com/${{ github.repository }}/commit/%H) - %s (%an)" $last_tag..HEAD)
         echo "release_notes=$release_notes" >> $GITHUB_ENV
 
