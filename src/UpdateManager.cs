@@ -23,19 +23,59 @@ namespace UpdateManager
             LoadConfig();
             UpdateConfig();
             SaveConfig();
-            RegisterListener<Listeners.OnServerHibernationUpdate>(OnServerHibernationUpdate);
             // print message if hot reload
             if (hotReload)
             {
                 Console.WriteLine(Localizer["core.hotreload"]);
             }
+            // register listeners
+            RegisterListeners();
+            // check on startup if enabled
+            if (Config.CheckOnStartup) checkForUpdates();
         }
 
         public override void Unload(bool hotReload)
         {
-            // unregister listeners
-            RemoveListener<Listeners.OnServerHibernationUpdate>(OnServerHibernationUpdate);
+            RemoveListeners();
             Console.WriteLine(Localizer["core.unload"]);
+        }
+
+        private void RegisterListeners()
+        {
+            if (Config.CheckOnMapStart) RegisterListener<Listeners.OnMapStart>(OnMapStart);
+            if (Config.CheckOnMapEnd) RegisterListener<Listeners.OnMapEnd>(OnMapEnd);
+            if (Config.CheckOnHibernation) RegisterListener<Listeners.OnServerHibernationUpdate>(OnServerHibernationUpdate);
+        }
+
+        private void RemoveListeners()
+        {
+            RemoveListener<Listeners.OnMapStart>(OnMapStart);
+            RemoveListener<Listeners.OnMapEnd>(OnMapEnd);
+            RemoveListener<Listeners.OnServerHibernationUpdate>(OnServerHibernationUpdate);
+        }
+
+        private void OnMapStart(string mapName)
+        {
+            // update plugin list
+            getPluginList();
+            // initialize configuration
+            LoadConfig();
+            UpdateConfig();
+            SaveConfig();
+            // check for updates
+            checkForUpdates();
+        }
+
+        private void OnMapEnd()
+        {
+            // update plugin list
+            getPluginList();
+            // initialize configuration
+            LoadConfig();
+            UpdateConfig();
+            SaveConfig();
+            // check for updates
+            checkForUpdates();
         }
 
         private void OnServerHibernationUpdate(bool isHibernating)
