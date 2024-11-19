@@ -78,7 +78,8 @@ jobs:
       if: env.new_version == 'true'
       id: get_release_notes
       run: |
-        release_notes=$(git log --pretty=format:"[%h](https://github.com/${{ github.repository }}/commit/%H) - %s (%an)" $(git describe --tags --abbrev=0)..HEAD)
+        last_tag=$(git describe --tags --abbrev=0 HEAD^)
+        release_notes=$(git log --pretty=format:"[%h](https://github.com/${{ github.repository }}/commit/%H) - %s (%an)" $last_tag..HEAD)
         echo "release_notes=$release_notes" >> $GITHUB_ENV
 
     - name: Add Release on Github
