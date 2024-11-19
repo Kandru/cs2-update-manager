@@ -85,7 +85,7 @@ jobs:
         else
           last_tag=$(git rev-list --max-parents=0 HEAD)
         fi
-        release_notes=$(git log --pretty=format:"[%h](https://github.com/${{ github.repository }}/commit/%H) - %s (%an)" $last_tag..HEAD | sed ':a;N;$!ba;s/\n/%0A/g')
+        release_notes=$(git log --pretty=format:"[%h](https://github.com/${{ github.repository }}/commit/%H) - %s (%an)" $last_tag..HEAD | jq -sRr @uri)
         echo "release_notes=$release_notes" >> $GITHUB_ENV
 
     - name: Add Release on Github
