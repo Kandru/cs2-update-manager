@@ -59,6 +59,10 @@ This plugin automatically creates a readable JSON configuration file. This confi
 {
   "enabled": true,
   "github_token": "",
+  "check_on_hibernation": true,
+  "check_on_startup": true,
+  "check_on_map_start": false,
+  "check_on_map_end": false,
   "plugins": {
     "MapModifiers": {
       "enabled": true,
