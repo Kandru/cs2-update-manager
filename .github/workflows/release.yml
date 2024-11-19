@@ -72,7 +72,7 @@ jobs:
 
     - name: Compress Release
       if: env.new_version == 'true'
-      run: cd /home/runner/work/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_FOLDER }}/bin/Release/net8.0 && zip -r /home/runner/work/${{ env.REPOSITORY_NAME }}-${{ env.version }}.zip ${{ env.PLUGIN_NAME }}
+      run: cd /home/runner/work/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_NAME }}/${{ env.REPOSITORY_FOLDER }}/bin/Release/net8.0 && zip -r /home/runner/work/${{ env.REPOSITORY_NAME }}-release-${{ env.version }}.zip ${{ env.PLUGIN_NAME }}
 
     - name: Build Release Notes
       if: env.new_version == 'true'
@@ -95,13 +95,13 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload ${{ env.REPOSITORY_NAME }}-${{ env.version }}.zip
+    - name: Upload ${{ env.REPOSITORY_NAME }}-release-${{ env.version }}.zip
       if: env.new_version == 'true'
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.UPLOAD_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/work/${{ env.REPOSITORY_NAME }}-${{ env.version }}.zip
-        asset_name: ${{ env.REPOSITORY_NAME }}-${{ env.version }}.zip
+        asset_path: /home/runner/work/${{ env.REPOSITORY_NAME }}-release-${{ env.version }}.zip
+        asset_name: ${{ env.REPOSITORY_NAME }}-release-${{ env.version }}.zip
         asset_content_type: application/zip
