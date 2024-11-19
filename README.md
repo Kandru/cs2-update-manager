@@ -31,11 +31,25 @@ Simply overwrite all plugin files and they will be reloaded automatically or jus
 
 ## Commands
 
-There is currently one server-side command available for this plugin:
+There is currently one server-side command available to use via the command line for this plugin:
 
-### update_plugin
+### um [check/update] [all/<plugin_name>]
 
-This command triggers the update process for all installed plugins.
+This command triggers the update mechanism for all or one specific plugin. Examples:
+
+```bash
+# check all plugins for updates (but do not update)
+um check all
+
+# update all plugins (including "check all")
+um update all
+
+# check specific plugin e.g. UpdateManager itself
+um check UpdateManager
+
+# update specific plugin e.g. UpdateManager itself
+um update UpdateManager
+```
 
 ## Configuration
 

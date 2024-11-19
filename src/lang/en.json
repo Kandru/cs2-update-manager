@@ -7,5 +7,11 @@
     "update.error": "[UpdateManager] Error while updating plugin {pluginName}: {error}",
     "update.available": "[UpdateManager] New version available: {pluginName} v{latestVersion} (current: v{pluginVersion})",
     "update.notfound": "[UpdateManager] {pluginName} v{pluginVersion} is already the newest version",
-    "update.success": "[UpdateManager] Plugin {pluginName} updated from v{pluginVersion} to v{latestVersion}"
+    "update.success": "[UpdateManager] Plugin {pluginName} updated from v{pluginVersion} to v{latestVersion}",
+    "command.invalid": "[UpdateManager] Invalid command. Usage: [check/update] [all/<plugin_name>]",
+    "command.check_all": "[UpdateManager] Checking {plugin} for updates...",
+    "command.check": "[UpdateManager] Checking {plugin} for updates...",
+    "command.update_all": "[UpdateManager] Updating all plugins...",
+    "command.update": "[UpdateManager] Updating {plugin}...",
+    "command.plugin_not_found": "[UpdateManager] Plugin {plugin} not found"
 }

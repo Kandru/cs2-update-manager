@@ -6,5 +6,11 @@
     "update.error": "[UpdateManager] Fehler beim Aktualisieren des Plugins {pluginName}: {error}",
     "update.available": "[UpdateManager] Neue Version verfügbar: {pluginName} v{latestVersion} (aktuell: v{pluginVersion})",
     "update.notfound": "[UpdateManager] {pluginName} v{pluginVersion} ist bereits die neueste Version",
-    "update.success": "[UpdateManager] Plugin {pluginName} aktualisiert von v{pluginVersion} auf v{latestVersion}"
+    "update.success": "[UpdateManager] Plugin {pluginName} aktualisiert von v{pluginVersion} auf v{latestVersion}",
+    "command.invalid": "[UpdateManager] Ungültiger Befehl. Verwendung: [check/update] [all/<plugin_name>]",
+    "command.check_all": "[UpdateManager] Überprüfe {plugin} auf Aktualisierungen...",
+    "command.check": "[UpdateManager] Überprüfe {plugin} auf Aktualisierungen...",
+    "command.update_all": "[UpdateManager] Aktualisiere alle Plugins...",
+    "command.update": "[UpdateManager] Aktualisiere {plugin}...",
+    "command.plugin_not_found": "[UpdateManager] Plugin {plugin} nicht gefunden"
 }
