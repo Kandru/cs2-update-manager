@@ -193,7 +193,7 @@ namespace UpdateManager
                         var zipAsset = assetList?.FirstOrDefault(a =>
                         {
                             if (a == null) return false;
-                            return a.TryGetValue("name", out var name) && name?.ToString().EndsWith(".zip") == true;
+                            return a.TryGetValue("name", out var name) && name != null && name.ToString()!.EndsWith(".zip");
                         });
                         // check if zip asset was found
                         if (zipAsset == null || !zipAsset.TryGetValue("browser_download_url", out var browserDownloadUrl))
