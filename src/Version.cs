@@ -4,6 +4,6 @@ namespace UpdateManager
 {
     public partial class UpdateManager : BasePlugin
     {
-        public override string ModuleVersion => "0.1.4";
+        public override string ModuleVersion => "0.1.5";
     }
 }
