@@ -31,7 +31,7 @@ namespace UpdateManager
             // register listeners
             RegisterListeners();
             // check on startup if enabled
-            if (Config.CheckOnStartup) checkForUpdates();
+            if (Config.CheckOnStartup) UpdateAllPlugins(true).GetAwaiter().GetResult();
         }
 
         public override void Unload(bool hotReload)
@@ -63,7 +63,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            checkForUpdates();
+            UpdateAllPlugins(true).GetAwaiter().GetResult();
         }
 
         private void OnMapEnd()
@@ -75,7 +75,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            checkForUpdates();
+            UpdateAllPlugins(true).GetAwaiter().GetResult();
         }
 
         private void OnServerHibernationUpdate(bool isHibernating)
@@ -88,7 +88,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            checkForUpdates();
+            UpdateAllPlugins(true).GetAwaiter().GetResult();
         }
 
         private void getPluginList()
@@ -107,8 +107,20 @@ namespace UpdateManager
                         .Build();
                     using var reader = new StreamReader(pluginFilePath);
                     var yamlObject = deserializer.Deserialize<Dictionary<string, string>>(reader);
-                    var pluginVersion = yamlObject["version"];
-                    var pluginRepoURL = yamlObject["repository"];
+                    if (!yamlObject.TryGetValue("version", out var pluginVersion))
+                    {
+                        Console.WriteLine(Localizer["update.error"].Value
+                            .Replace("{pluginName}", pluginName)
+                            .Replace("{error}", "Version not found in .info file."));
+                        continue;
+                    }
+                    if (!yamlObject.TryGetValue("repository", out var pluginRepoURL))
+                    {
+                        Console.WriteLine(Localizer["update.error"].Value
+                            .Replace("{pluginName}", pluginName)
+                            .Replace("{error}", "Repository-URL not found in .info file."));
+                        continue;
+                    }
                     // add to plugin list
                     _plugins.Add(new Tuple<string, string, string>(pluginName, pluginVersion, pluginRepoURL));
                     Console.WriteLine(Localizer["plugin.found"].Value
@@ -118,117 +130,139 @@ namespace UpdateManager
             }
         }
 
-        private void checkForUpdates()
+        private async Task<bool> UpdatePluginOnGithub(string pluginName, bool applyUpdate)
         {
-            Task.Run(async () =>
+            // find plugin in list
+            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName);
+            if (plugin == null) return false;
+            // get plugin details
+            var (name, version, repoURL) = plugin;
+            // check for plugin configuration
+            var pluginConfig = Config.Plugins[name];
+            if (pluginConfig == null || !pluginConfig.Enabled) return false;
+            // check for updates
+            try
             {
-                foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "CounterStrikeSharp");
+                if (!string.IsNullOrEmpty(pluginConfig.GithubToken))
+                    client.DefaultRequestHeaders.Add("Authorization", $"token {pluginConfig.GithubToken}");
+                else if (!string.IsNullOrEmpty(Config.GithubToken))
+                    client.DefaultRequestHeaders.Add("Authorization", $"token {Config.GithubToken}");
+
+                var repoPath = new Uri(repoURL).AbsolutePath.Trim('/');
+                var response = await client.GetAsync($"https://api.github.com/repos/{repoPath}/releases/latest");
+
+                // error due to http error
+                if (!response.IsSuccessStatusCode)
                 {
-                    // get plugin configuration
-                    var pluginConfig = Config.Plugins[pluginName];
-                    if (pluginConfig == null || !pluginConfig.Enabled) continue;
-                    // check github api /repos/{owner}/{repo}/releases/latest
-                    try
-                    {
-                        var client = new HttpClient();
-                        client.DefaultRequestHeaders.Add("User-Agent", "CounterStrikeSharp");
-                        // check for plugin github token
-                        if (!string.IsNullOrEmpty(pluginConfig.GithubToken))
-                            client.DefaultRequestHeaders.Add("Authorization", $"token {pluginConfig.GithubToken}");
-                        // check for global github token
-                        else if (!string.IsNullOrEmpty(Config.GithubToken))
-                            client.DefaultRequestHeaders.Add("Authorization", $"token {Config.GithubToken}");
-                        // get latest release
-                        var repoPath = new Uri(pluginRepoURL).AbsolutePath.Trim('/');
-                        var response = await client.GetAsync($"https://api.github.com/repos/{repoPath}/releases/latest");
-                        // check if response is successful
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine(Localizer["update.error"].Value
-                                .Replace("{pluginName}", pluginName)
-                                .Replace("{error}", response.ReasonPhrase));
-                            continue;
-                        }
-                        // parse response
-                        var responseString = await response.Content.ReadAsStringAsync();
-                        // get download url for latest .zip
-                        var release = JsonSerializer.Deserialize<Dictionary<string, object>>(responseString);
-                        if (release == null)
-                        {
-                            Console.WriteLine(Localizer["update.error"].Value
-                                .Replace("{pluginName}", pluginName)
-                                .Replace("{error}", "Release data not found."));
-                            continue;
-                        }
-                        if (!release.TryGetValue("tag_name", out var tagName))
-                        {
-                            Console.WriteLine(Localizer["update.error"].Value
-                                .Replace("{pluginName}", pluginName)
-                                .Replace("{error}", "Tag name not found in release data."));
-                            continue;
-                        }
-                        var latestVersion = tagName.ToString();
-                        if (latestVersion == pluginVersion)
-                        {
-                            Console.WriteLine(Localizer["update.notfound"].Value
-                            .Replace("{pluginName}", pluginName)
-                            .Replace("{pluginVersion}", pluginVersion));
-                            continue;
-                        }
-                        Console.WriteLine(Localizer["update.available"].Value
-                            .Replace("{pluginName}", pluginName)
-                            .Replace("{pluginVersion}", pluginVersion)
-                            .Replace("{latestVersion}", latestVersion));
-                        // download and update plugin
-                        if (!release.TryGetValue("assets", out var assets) || assets == null)
-                        {
-                            Console.WriteLine(Localizer["update.error"].Value
-                                .Replace("{pluginName}", pluginName)
-                                .Replace("{error}", "Assets not found in release data."));
-                            continue;
-                        }
-                        // get asset list
-                        var assetList = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(assets?.ToString() ?? string.Empty);
-                        // look for zip asset
-                        var zipAsset = assetList?.FirstOrDefault(a =>
-                        {
-                            if (a == null) return false;
-                            return a.TryGetValue("name", out var name) && name != null && name.ToString()!.EndsWith(".zip");
-                        });
-                        // check if zip asset was found
-                        if (zipAsset == null || !zipAsset.TryGetValue("browser_download_url", out var browserDownloadUrl))
-                        {
-                            Console.WriteLine(Localizer["update.error"].Value
-                                .Replace("{pluginName}", pluginName)
-                                .Replace("{error}", "Download URL for .zip file not found in assets."));
-                            continue;
-                        }
-                        // download zip
-                        var downloadURL = browserDownloadUrl.ToString();
-                        var downloadPath = Path.Combine(_pluginPath, $"{pluginName}.zip");
-                        var downloadStream = await client.GetStreamAsync(downloadURL);
-                        // save zip
-                        using (var fileStream = File.Create(downloadPath))
-                        {
-                            await downloadStream.CopyToAsync(fileStream);
-                        }
-                        // extract zip
-                        ZipFile.ExtractToDirectory(downloadPath, _pluginPath, true);
-                        // remove zip
-                        File.Delete(downloadPath);
-                        Console.WriteLine(Localizer["update.success"].Value
-                            .Replace("{pluginName}", pluginName)
-                            .Replace("{pluginVersion}", pluginVersion)
-                            .Replace("{latestVersion}", latestVersion));
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(Localizer["update.error"].Value
-                            .Replace("{pluginName}", pluginName)
-                            .Replace("{error}", e.Message));
-                    }
+                    Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", response.ReasonPhrase));
+                    return false;
                 }
-            });
+                // read response
+                var responseString = await response.Content.ReadAsStringAsync();
+                var release = JsonSerializer.Deserialize<Dictionary<string, object>>(responseString);
+                // error due to missing data
+                if (release == null || !release.TryGetValue("tag_name", out var tagName))
+                {
+                    Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", "Release data not found."));
+                    return false;
+                }
+                // check for version differences
+                var latestVersion = tagName.ToString();
+                if (latestVersion == version)
+                {
+                    Console.WriteLine(Localizer["update.notfound"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{pluginVersion}", version));
+                    return false;
+                }
+                // update available
+                Console.WriteLine(Localizer["update.available"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{pluginVersion}", version)
+                    .Replace("{latestVersion}", latestVersion));
+                // stop if no update should be applied
+                if (!applyUpdate) return true;
+                // check for assets
+                if (!release.TryGetValue("assets", out var assets) || assets == null)
+                {
+                    Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", "Assets not found in release data."));
+                    return false;
+                }
+                // check for zip assets
+                var assetList = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(assets?.ToString() ?? string.Empty);
+                var zipAsset = assetList?.FirstOrDefault(a =>
+                {
+                    if (a == null) return false;
+                    return a.TryGetValue("name", out var assetName) && assetName != null && assetName.ToString()!.EndsWith(".zip");
+                });
+                // check if download url exists
+                if (zipAsset == null || !zipAsset.TryGetValue("browser_download_url", out var browserDownloadUrl))
+                {
+                    Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", "Download URL for .zip file not found in assets."));
+                    return false;
+                }
+                // download zip
+                var downloadURL = browserDownloadUrl.ToString();
+                var downloadPath = Path.Combine(_pluginPath, $"{name}.zip");
+                var downloadStream = await client.GetStreamAsync(downloadURL);
+                // save zip
+                using (var fileStream = File.Create(downloadPath))
+                {
+                    await downloadStream.CopyToAsync(fileStream);
+                }
+                // extract zip
+                ZipFile.ExtractToDirectory(downloadPath, _pluginPath, true);
+                File.Delete(downloadPath);
+                // indicate success
+                Console.WriteLine(Localizer["update.success"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{pluginVersion}", version)
+                    .Replace("{latestVersion}", latestVersion));
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                // error during update
+                Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", e.Message));
+                return false;
+            }
+        }
+
+        private async Task UpdatePlugin(string pluginName, bool applyUpdate)
+        {
+            // find plugin in list
+            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName);
+            if (plugin == null) return;
+            // get plugin details
+            var (name, version, repoURL) = plugin;
+            // check if repoURL is github
+            if (repoURL.Contains("github.com"))
+                await UpdatePluginOnGithub(pluginName, applyUpdate);
+            else
+                Console.WriteLine(Localizer["update.error"].Value
+                    .Replace("{pluginName}", name)
+                    .Replace("{error}", "Only Github repositories are supported."));
+        }
+
+        private async Task UpdateAllPlugins(bool applyUpdate)
+        {
+            foreach (var plugin in _plugins)
+            {
+                await UpdatePlugin(plugin.Item1, applyUpdate);
+            }
         }
     }
 }

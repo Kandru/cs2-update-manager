@@ -13,7 +13,7 @@ namespace UpdateManager
             // update plugin list
             getPluginList();
             // check for updates
-            checkForUpdates();
+            UpdateAllPlugins(true).GetAwaiter().GetResult();
         }
     }
 }
