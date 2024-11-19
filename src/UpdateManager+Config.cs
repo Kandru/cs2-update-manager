@@ -18,6 +18,8 @@ namespace UpdateManager
     {
         // disable update checks completely
         [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
+        // github token for private repositories
+        [JsonPropertyName("github_token")] public string GithubToken { get; set; } = "";
         // check for updates on server hibernation
         [JsonPropertyName("check_on_hibernation")] public bool CheckOnHibernation { get; set; } = true;
         // check for updates on server startup
@@ -49,7 +51,7 @@ namespace UpdateManager
 
         private void UpdateConfig()
         {
-            // iterate through all dices and add them to the configuration file
+            // iterate through all plugins and add them to the configuration file
             foreach (var (pluginName, pluginVersion, pluginRepoURL) in _plugins)
             {
                 if (!Config.Plugins.ContainsKey(pluginName))
