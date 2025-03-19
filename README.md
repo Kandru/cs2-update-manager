@@ -59,6 +59,7 @@ This plugin automatically creates a readable JSON configuration file. This confi
 {
   "enabled": true,
   "github_token": "",
+  "min_check_interval": 60,
   "check_on_hibernation": true,
   "check_on_startup": true,
   "check_on_map_start": false,

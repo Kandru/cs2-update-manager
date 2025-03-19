@@ -13,6 +13,7 @@ namespace UpdateManager
 
         private string _pluginPath = "";
         private List<Tuple<string, string, string>> _plugins = [];
+        private long _nextCheck = 0;
 
         public override void Load(bool hotReload)
         {
@@ -70,6 +71,7 @@ namespace UpdateManager
             LoadConfig();
             UpdateConfig();
             SaveConfig();
+            if (!CanCheckForUpdate()) return;
             // check for updates
             UpdateAllPlugins(true);
         }
@@ -82,13 +84,14 @@ namespace UpdateManager
             LoadConfig();
             UpdateConfig();
             SaveConfig();
+            if (!CanCheckForUpdate()) return;
             // check for updates
             UpdateAllPlugins(true);
         }
 
         private void OnServerHibernationUpdate(bool isHibernating)
         {
-            if (!isHibernating) return;
+            if (!isHibernating || !CanCheckForUpdate()) return;
             // update plugin list
             getPluginList();
             // initialize configuration
@@ -271,6 +274,17 @@ namespace UpdateManager
             {
                 UpdatePlugin(plugin.Item1, applyUpdate);
             }
+        }
+
+        private bool CanCheckForUpdate()
+        {
+            // check if update check is disabled
+            if (Config.MinCheckInterval <= 0) return true;
+            // check if enough time has passed
+            if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() < _nextCheck) return false;
+            // set next check time
+            _nextCheck = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + Config.MinCheckInterval * 60;
+            return true;
         }
     }
 }

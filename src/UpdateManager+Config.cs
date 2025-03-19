@@ -20,6 +20,8 @@ namespace UpdateManager
         [JsonPropertyName("enabled")] public bool Enabled { get; set; } = true;
         // github token for private repositories
         [JsonPropertyName("github_token")] public string GithubToken { get; set; } = "";
+        // wait at least x minutes before checking again for updates
+        [JsonPropertyName("min_check_interval")] public int MinCheckInterval { get; set; } = 60;
         // check for updates on server hibernation
         [JsonPropertyName("check_on_hibernation")] public bool CheckOnHibernation { get; set; } = true;
         // check for updates on server startup
