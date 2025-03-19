@@ -31,13 +31,21 @@ namespace UpdateManager
             // register listeners
             RegisterListeners();
             // check on startup if enabled
-            if (Config.CheckOnStartup) UpdateAllPlugins(true).GetAwaiter().GetResult();
+            if (Config.CheckOnStartup) UpdateAllPlugins(true);
         }
 
         public override void Unload(bool hotReload)
         {
+            // stop the queue processing task
+            cancellationToken.Cancel();
             RemoveListeners();
             Console.WriteLine(Localizer["core.unload"]);
+        }
+
+        public override void OnAllPluginsLoaded(bool isReload)
+        {
+            // Start the queue processing task
+            Task.Run(() => ProcessUpdateQueueAsync(cancellationToken.Token));
         }
 
         private void RegisterListeners()
@@ -63,7 +71,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            UpdateAllPlugins(true).GetAwaiter().GetResult();
+            UpdateAllPlugins(true);
         }
 
         private void OnMapEnd()
@@ -75,7 +83,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            UpdateAllPlugins(true).GetAwaiter().GetResult();
+            UpdateAllPlugins(true);
         }
 
         private void OnServerHibernationUpdate(bool isHibernating)
@@ -88,7 +96,7 @@ namespace UpdateManager
             UpdateConfig();
             SaveConfig();
             // check for updates
-            UpdateAllPlugins(true).GetAwaiter().GetResult();
+            UpdateAllPlugins(true);
         }
 
         private void getPluginList()
@@ -241,7 +249,7 @@ namespace UpdateManager
             }
         }
 
-        private async Task UpdatePlugin(string pluginName, bool applyUpdate)
+        private void UpdatePlugin(string pluginName, bool applyUpdate)
         {
             // find plugin in list
             var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName);
@@ -250,18 +258,18 @@ namespace UpdateManager
             var (name, version, repoURL) = plugin;
             // check if repoURL is github
             if (repoURL.Contains("github.com"))
-                await UpdatePluginOnGithub(pluginName, applyUpdate);
+                EnqueueUpdateTask(() => UpdatePluginOnGithub(name, applyUpdate));
             else
                 Console.WriteLine(Localizer["update.error"].Value
                     .Replace("{pluginName}", name)
                     .Replace("{error}", "Only Github repositories are supported."));
         }
 
-        private async Task UpdateAllPlugins(bool applyUpdate)
+        private void UpdateAllPlugins(bool applyUpdate)
         {
             foreach (var plugin in _plugins)
             {
-                await UpdatePlugin(plugin.Item1, applyUpdate);
+                UpdatePlugin(plugin.Item1, applyUpdate);
             }
         }
     }

@@ -36,14 +36,14 @@ namespace UpdateManager
             {
                 if (applyUpdate) command.ReplyToCommand(Localizer["command.update_all"]);
                 else command.ReplyToCommand(Localizer["command.check_all"]);
-                UpdateAllPlugins(applyUpdate).GetAwaiter().GetResult();
+                UpdateAllPlugins(applyUpdate);
                 return;
             }
             else if (_plugins.FirstOrDefault(x => x.Item1 == pluginName) != null)
             {
                 if (applyUpdate) command.ReplyToCommand(Localizer["command.update"].Value.Replace("{plugin}", pluginName));
                 else command.ReplyToCommand(Localizer["command.check"].Value.Replace("{plugin}", pluginName));
-                UpdatePlugin(pluginName, applyUpdate).GetAwaiter().GetResult();
+                UpdatePlugin(pluginName, applyUpdate);
             }
             else
             {

@@ -2,6 +2,7 @@
     "core.hotreload": "[UpdateManager] Neu geladen!",
     "core.unload": "[UpdateManager] Plugin entladen!",
     "config.loaded": "[UpdateManager] Konfiguration geladen!",
+    "core.tasks.stopped": "[UpdateManager] Alle Aufgaben gestoppt!",
     "plugin.found": "[UpdateManager] Plugin gefunden: {pluginName} v{pluginVersion}",
     "update.error": "[UpdateManager] Fehler beim Aktualisieren des Plugins {pluginName}: {error}",
     "update.available": "[UpdateManager] Neue Version verfügbar: {pluginName} v{latestVersion} (aktuell: v{pluginVersion})",
