@@ -17,7 +17,7 @@ namespace UpdateManager
             var pluginName = command.GetArg(2).ToLower();
             bool applyUpdate;
             // check action
-            switch (commandType.ToLower())
+            switch (commandType)
             {
                 case "check":
                     applyUpdate = false;
