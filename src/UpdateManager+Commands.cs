@@ -13,8 +13,8 @@ namespace UpdateManager
         public void CommandUpdatePlugins(CCSPlayerController player, CommandInfo command)
         {
             // arguments
-            var commandType = command.GetArg(1);
-            var pluginName = command.GetArg(2);
+            var commandType = command.GetArg(1).ToLower();
+            var pluginName = command.GetArg(2).ToLower();
             bool applyUpdate;
             // check action
             switch (commandType.ToLower())

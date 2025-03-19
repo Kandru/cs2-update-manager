@@ -12,7 +12,7 @@ namespace UpdateManager
         public override string ModuleAuthor => "Jon-Mailes Graeffe <mail@jonni.it> / Kalle <kalle@kandru.de>";
 
         private string _pluginPath = "";
-        private List<Tuple<string, string, string>> _plugins = new();
+        private List<Tuple<string, string, string>> _plugins = [];
 
         public override void Load(bool hotReload)
         {
@@ -130,7 +130,7 @@ namespace UpdateManager
                         continue;
                     }
                     // add to plugin list
-                    _plugins.Add(new Tuple<string, string, string>(pluginName, pluginVersion, pluginRepoURL));
+                    _plugins.Add(new Tuple<string, string, string>(pluginName.ToLower(), pluginVersion, pluginRepoURL));
                     Console.WriteLine(Localizer["plugin.found"].Value
                         .Replace("{pluginName}", pluginName)
                         .Replace("{pluginVersion}", pluginVersion));
@@ -141,7 +141,7 @@ namespace UpdateManager
         private async Task<bool> UpdatePluginOnGithub(string pluginName, bool applyUpdate)
         {
             // find plugin in list
-            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName);
+            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName.ToLower());
             if (plugin == null) return false;
             // get plugin details
             var (name, version, repoURL) = plugin;
@@ -252,7 +252,7 @@ namespace UpdateManager
         private void UpdatePlugin(string pluginName, bool applyUpdate)
         {
             // find plugin in list
-            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName);
+            var plugin = _plugins.FirstOrDefault(p => p.Item1 == pluginName.ToLower());
             if (plugin == null) return;
             // get plugin details
             var (name, version, repoURL) = plugin;
