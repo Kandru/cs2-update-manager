@@ -39,7 +39,7 @@ namespace UpdateManager
                 UpdateAllPlugins(applyUpdate);
                 return;
             }
-            else if (_plugins.FirstOrDefault(x => x.Item1 == pluginName) != null)
+            else if (_plugins.FirstOrDefault(x => x.Item1.ToLower() == pluginName) != null)
             {
                 if (applyUpdate) command.ReplyToCommand(Localizer["command.update"].Value.Replace("{plugin}", pluginName));
                 else command.ReplyToCommand(Localizer["command.check"].Value.Replace("{plugin}", pluginName));
