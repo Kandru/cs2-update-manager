@@ -19,10 +19,13 @@ The Plugin Update Manager is a plugin for Counter-Strike 2 designed to automatic
 2. **Effortless**
    - A server owner simply needs to add this plugin to their server and forget about outdated plugins.
 
+> [!IMPORTANT]  
+> Plug-in developers need to support this plug-in. It does not work out of the box for all plug-ins. [Check here](https://github.com/Kandru/cs2-update-manager/blob/main/COMPATIBLE_PLUGINS.md) for an incomplete list of supported plug-ins.
+
 ## Plugin Installation
 
 1. Download and extract the latest release from the [GitHub releases page](https://github.com/Kandru/cs2-update-manager/releases/).
-2. Move the "UpdateManager" folder to the `/addons/counterstrikesharp/configs/plugins/` directory of your gameserver.
+2. Move the "UpdateManager" folder to the `/addons/counterstrikesharp/plugins/` directory of your gameserver.
 3. Restart the server.
 
 ## Plugin Update
