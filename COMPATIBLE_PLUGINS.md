@@ -7,6 +7,7 @@ This list contains all known compatible plugins which the AutoUpdater. Spread th
 - [CS2 Challenges](https://github.com/Kandru/cs2-challenges) - allows players to complete challenges within your server to get something in return.
 - [CS2 Chat Info](https://github.com/Kandru/cs2-chat-info) - displays a help message with !info for players and lists all available commands and other stuff.
 - [CS2 Chat Sounds](https://github.com/Kandru/cs2-chat-sounds) - plays custom sounds when the player writes a specific chat command.
+- [CS2 Loadout Keeper](https://github.com/Kandru/cs2-loadout-keeper) - remembers the player's bought or picked up weapons and gives these back to the player after (re)spawn.
 - [CS2 Lucky Defuse](https://github.com/Kandru/cs2-lucky-defuse) - gives players the ability to cut a wire when defusing a bomb.
 - [CS2 Parachute (Fork)](https://github.com/Kandru/cs2-parachute) - gives players a parachute. [Original Project](https://github.com/Franc1sco/CS2-Parachute).
 - [CS2 Roll The Dice](https://github.com/Kandru/cs2-roll-the-dice) - let the player roll the dice and either get something good or bad in return for the round.
