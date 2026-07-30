@@ -1,0 +1,18 @@
+{
+    "core.hotreload": "[UpdateManager] Eklenti anında yeniden yüklendi!",
+    "core.unload": "[UpdateManager] Eklenti devre dışı bırakıldı!",
+    "config.loaded": "[UpdateManager] Konfigürasyon yüklendi!",
+    "core.tasks.stopped": "[UpdateManager] Tüm görevler durduruldu!",
+    "plugin.found": "[UpdateManager] Eklenti bulundu: {pluginName} v{pluginVersion}",
+    "plugin.error": "[UpdateManager] {pluginName} eklentisi eklenirken hata oluştu: {error}",
+    "update.error": "[UpdateManager] {pluginName} eklentisi güncellenirken hata oluştu: {error}",
+    "update.available": "[UpdateManager] Yeni sürüm mevcut: {pluginName} v{latestVersion} (mevcut: v{pluginVersion})",
+    "update.notfound": "[UpdateManager] {pluginName} v{pluginVersion} zaten en yeni sürümde",
+    "update.success": "[UpdateManager] {pluginName} eklentisi v{pluginVersion} sürümünden v{latestVersion} sürümüne güncellendi",
+    "command.invalid": "[UpdateManager] Geçersiz komut. Kullanım: [check/update] [all/<plugin_name>]",
+    "command.check_all": "[UpdateManager] {plugin} güncellemeler için kontrol ediliyor...",
+    "command.check": "[UpdateManager] {plugin} güncellemeler için kontrol ediliyor...",
+    "command.update_all": "[UpdateManager] Tüm eklentiler güncelleniyor...",
+    "command.update": "[UpdateManager] {plugin} güncelleniyor...",
+    "command.plugin_not_found": "[UpdateManager] {plugin} eklentisi bulunamadı"
+}
